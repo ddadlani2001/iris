@@ -37,7 +37,7 @@ y_test = torch.LongTensor(y_test)
 # Set the criterion of our model to measure the error, how far off predictions are from the data
 criterion = nn.CrossEntropyLoss()
 
-# Choose Adam Optimizer, lr = learning rate (if error doesn't go down after a bunch of iterations (epochs) - we want to lower lr
+# Choose Adam Optimizer, lr = learning rate (if error doesn't go down after a bunch of iterations (epochs) - we want to lower lr)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 
 # Train our model
@@ -64,10 +64,10 @@ for i in range(epochs):
     loss.backward()
     optimizer.step()
 
-    # plt.plot(range(epochs), losses)
-    # plt.ylabel("loss/error")
-    # plt.xlabel("Epoch")
-    # plt.show()
+plt.plot(range(epochs), losses)
+plt.ylabel("loss/error")
+plt.xlabel("Epoch")
+plt.show()
 
 # Evaluate Model on Test Data Set (validate model on test set)
 with torch.no_grad(): # Turn off back propagation
@@ -77,10 +77,10 @@ with torch.no_grad(): # Turn off back propagation
 correct = 0
 with torch.no_grad():
     for i, data in enumerate(X_test):
-        y_val= model.forward(data)
+        y_val = model.forward(data)
 
         # What type of flower our network thinks it is
-        print(f'{i+1}.)  {str(y_val)} \t {y_test[i]}')
+        print(f'{i+1}.)  {str(y_val)} \t {y_test[i]} \t {y_val.argmax().item()}')
 
         # Check if correct
         if y_val.argmax().item() == y_test[i]:
@@ -89,6 +89,15 @@ with torch.no_grad():
 print(f'we got {correct} correct')
 
 
+new_iris = torch.tensor([4.7, 3.2, 1.3, 0.2])
 
+with torch.no_grad():
+    print(model(new_iris))
 
+# Save NN Model
+torch.save(model.state_dict(), 'iris_nn_model.pt')
+
+# Load saved model
+# new_model = Model()
+# new_model.load_state_dict(torch.load('iris_nn_model.pt'))
 
